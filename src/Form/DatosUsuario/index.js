@@ -1,9 +1,10 @@
 import React,{useState} from "react";
 import { TextField, Button, Box } from "@mui/material";
+import { validarEmail,validarPassword } from "./validaciones";
 
 const  DatosUsuario = () => {
-  const [email,setEmail]=useState({value:'prueba@test.cl',valid: true })
-  const [password,setPassword]=useState({value:'asdasd',valid: true })
+  const [email,setEmail]=useState({value:'',valid: null })
+  const [password,setPassword]=useState({value:'',valid: null })
  
   
  
@@ -19,7 +20,12 @@ const  DatosUsuario = () => {
         }}
         onSubmit={(e)=>{
           e.preventDefault();
-          console.log(email,password)
+          if (email.valid && password.valid){
+            console.log("siguiente formulario")
+          }else{
+            console.log('No son validos')
+          }
+          
           
         }}
       >
@@ -29,11 +35,13 @@ const  DatosUsuario = () => {
           fullWidth
           margin="dense"
           type="email"
-          error={false}
-          helperText={false && "Ingresa un correo electrónico válido"}
+          error={email.valid ==false}
+          helperText={email.valid == false && "Ingresa un correo electrónico válido"}
           value={email.value}
           onChange={(input) => {
-            setEmail({value: input.target.value, valid:true});
+            const email = input.target.value
+            const validar = validarPassword(email)
+            setEmail({value: email, valid:validar});
           }}
         />
         <TextField
@@ -42,9 +50,13 @@ const  DatosUsuario = () => {
           fullWidth
           margin="dense"
           type="password"
+          error={password.valid == false}
+          helperText={password.valid == false && "Ingresa contraseña valida entre 8 a 20 caract"}
           value={password.value}
           onChange={(input) => {
-            setPassword({value: input.target.value, valid:true});
+            const password = input.target.value
+            const valido = validarPassword(password)
+            setPassword({value: password, valid:valido});
           }}
         />
         <Button variant="contained" type="submit">
